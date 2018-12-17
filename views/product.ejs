@@ -43,39 +43,28 @@
                         <th>名称</th>
                         <th>价格</th>
                         <th>邮费</th>
+                        <th>描述</th>
                        
                         <th class="text-center">操作</th>
                     </tr>
                     </thead>
                     <tbody>
-
+                  <% for(var i=0;i<list.length;i++) {%>
                     <tr>
-                        <td>1</td>
-                        <td>图标</td>
-                        <td>背包1111111</td>
-                        <td>20元</td>
-                        <td>10元</td>
-                      
-                        <td class="text-center">修改  删除</td>
-                    </tr>
-					   <tr>
-                        <td>2</td>
-                        <td>图标</td>
-                        <td>thinpad笔记本电脑</td>
-                        <td>20元</td>
-                        <td>10元</td>
-                      
-                        <td class="text-center">修改  删除</td>
-                    </tr>
-					   <tr>
-                        <td>3</td>
-                        <td>图标</td>
-                        <td>iphone7</td>
-                        <td>20元</td>
-                        <td>10元</td>
-                      
-                        <td class="text-center">修改  删除</td>
-                    </tr>
+                        <td><%=i+1%></td>
+                        <td><img src='<%=list[i].pic%>' width='50'/></td>
+                        <td><%=list[i].title%></td>
+                        <td><%=list[i].price%></td>
+                        <td><%=list[i].fee%></td>
+                        <td><%=list[i].description%></td>
+                    <td class="text-center">
+
+                    <a href="/productedit?id=<%=list[i]._id%>" class="btn btn-success">修改</a>
+                    <a href="/productdelete?id=<%=list[i]._id%>" class="btn btn-danger">删除</a>
+                  
+                    
+                    </td>
+                    <%}%>
 
                     </tbody>
                 </table>
