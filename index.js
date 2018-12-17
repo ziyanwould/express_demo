@@ -6,7 +6,7 @@ const express = require('express')
 let app =new express();/**实例化一下 */
 const md5 = require('md5-node');/*md5 加密*/
 const multiparty = require('multiparty');/**图片上传的的板块 也可以获取到form表单数据  也可以上传图片*/
-
+var fs = require('fs');
 
 //获取post
 let bodyParser = require('body-parser')
@@ -126,7 +126,7 @@ app.get('/login',(req,res)=>{
 //商品列表
 app.get('/product',(req,res)=>{
     DB.find('product',{},(err,data)=>{
-        console.log('data',data)
+        //console.log('data',data)
         res.render('product',{
            list:data 
         })
@@ -177,8 +177,67 @@ app.post('/ProductAdd',(req,res)=>{
 
 //修改商品
 app.get('/productedit',(req,res)=>{
-    res.render('productedit')
+    let id = req.query.id;
+    console.log(id);
+    DB.find('product',{"_id":new DB.ObjectID(id)},(err,data)=>{
+        res.render('productedit',{
+            list:data[0]
+        })
+    })
+   
 })
+//修改商品重新保存路由
+app.post('/Doproductedit',(req,res)=>{
+    let form = new multiparty.Form();
+    form.uploadDir='upload' //上传图片保存的地址
+
+    form.parse(req,(err,fields,files)=>{
+        //console.log(fields);
+        //console.log(files);
+
+        let _id=fields._id[0];
+        let title=fields.title[0];
+        let price=fields.price[0];
+        let fee=fields.fee[0];
+        let description=fields.description[0];
+
+        let originalFilename=files.pic[0].originalFilename;
+        let pic=files.pic[0].path;
+
+        if(originalFilename){/**修改图片 */
+            var setData={
+                title,
+                price,
+                fee,
+                description,
+                pic
+
+            }
+        }else{/**没修改图片 */
+            var setData={
+                title,
+                price,
+                fee,
+                description
+               
+
+            }
+            //删除临时生成图片
+             fs.unlink(pic,err=>console.log(err));
+        }
+
+        DB.upDate('product',{"_id":new DB.ObjectID(_id)},setData,function(err,data){
+
+            if(!err){
+                res.redirect('/product');
+            }
+
+    })
+
+    })
+})
+//商品修改结束
+
 //删除商品
 app.get('/productdelete',(req,res)=>{
     // res.send('productdelete')

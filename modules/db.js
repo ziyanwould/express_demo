@@ -66,7 +66,7 @@ exports.deleteThis=(collectionname,json,callback)=>{
 exports.upDate=(collectionname,json1,json2,callback)=>{
 
     _connetDb(db=>{
-       db.collection(collectionname).updateOne(json1,{$set:json2},error,data=>{
+       db.collection(collectionname).updateOne(json1,{$set:json2},(error,data)=>{
            callback(error,data)
        }) 
     })
